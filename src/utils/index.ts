@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 // 在一个函数内改变传入的对象是不好的（js中）
-export const isFalsy = (value) => (value === 0 ? false : !value);
+export const isFalsy = (value: any) => (value === 0 ? false : !value);
 
-export const cleanObject = (object) => {
+export const cleanObject = (object: object) => {
   const result = { ...object };
   Object.keys(result).forEach((key) => {
+    // @ts-ignore
     const value = result[key];
     if (isFalsy(value)) {
+      // @ts-ignore
       delete result[key];
     }
   });
@@ -15,14 +17,14 @@ export const cleanObject = (object) => {
 };
 
 // 意义是复用 useEffect 中的这个功能
-export const useMount = (callback) => {
+export const useMount = (callback: () => void) => {
   useEffect(() => {
     callback();
     // 下面空数组的作用是希望此函数只在页面初始化的情况下，加载一次。
   }, []);
 };
 
-export const useDebounce = (value, delay) => {
+export const useDebounce = (value: any, delay?: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
