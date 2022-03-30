@@ -57,3 +57,5 @@ export const useAuth = () => {
   }
   return context;
 };
+
+type FavoriteNumber = string | number;
