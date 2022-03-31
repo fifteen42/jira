@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 // 在一个函数内改变传入的对象是不好的（js中）
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 
-export const cleanObject = (object: object) => {
+export const isVoid = (value: unknown) => value;
+
+export const cleanObject = (object: { [key: string]: unknown }) => {
   const result = { ...object };
   Object.keys(result).forEach((key) => {
-    // @ts-ignore
     const value = result[key];
     if (isFalsy(value)) {
-      // @ts-ignore
       delete result[key];
     }
   });
@@ -21,6 +21,7 @@ export const useMount = (callback: () => void) => {
   useEffect(() => {
     callback();
     // 下面空数组的作用是希望此函数只在页面初始化的情况下，加载一次。
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 
