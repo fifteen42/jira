@@ -52,3 +52,19 @@ export const useArray = <A>(initialArray: A[]) => {
       setValue(value.filter((item, i) => i !== index)),
   };
 };
+
+export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
+  const oldTitle = title;
+
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
+  useEffect(() => {
+    return () => {
+      if (!keepOnUnmount) {
+        document.title = oldTitle;
+      }
+    };
+  });
+};
