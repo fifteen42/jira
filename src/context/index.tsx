@@ -7,10 +7,10 @@ import { store } from "store";
 export const AppProviders = ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient();
   return (
-    // <Provider store={store} >
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>{children}</AuthProvider>
-    </QueryClientProvider>
-    // </Provider>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>{children}</AuthProvider>
+      </QueryClientProvider>
+    </Provider>
   );
 };

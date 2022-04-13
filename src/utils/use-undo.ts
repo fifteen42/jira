@@ -1,4 +1,4 @@
-import { useCallback, useReducer, useState } from "react";
+import { useCallback, useReducer } from "react";
 
 const UNDO = "UNDO";
 const REDO = "REDO";
@@ -16,8 +16,6 @@ type Action<T> = {
   type: typeof UNDO | typeof REDO | typeof SET | typeof RESET;
 };
 
-// useReducer 的用法就像是一个状态工厂
-
 const undoReducer = <T>(state: State<T>, action: Action<T>) => {
   const { past, present, future } = state;
   const { newPresent } = action;
@@ -25,14 +23,17 @@ const undoReducer = <T>(state: State<T>, action: Action<T>) => {
   switch (action.type) {
     case UNDO: {
       if (past.length === 0) return state;
+
       const previous = past[past.length - 1];
       const newPast = past.slice(0, past.length - 1);
+
       return {
         past: newPast,
         present: previous,
         future: [present, ...future],
       };
     }
+
     case REDO: {
       if (future.length === 0) return state;
 
@@ -45,17 +46,18 @@ const undoReducer = <T>(state: State<T>, action: Action<T>) => {
         future: newFuture,
       };
     }
+
     case SET: {
       if (newPresent === present) {
         return state;
       }
-
       return {
         past: [...past, present],
         present: newPresent,
         future: [],
       };
     }
+
     case RESET: {
       return {
         past: [],
@@ -67,7 +69,7 @@ const undoReducer = <T>(state: State<T>, action: Action<T>) => {
   return state;
 };
 
-export const useUndo = <T>(initialPresent: T, action: Action<T>) => {
+export const useUndo = <T>(initialPresent: T) => {
   const [state, dispatch] = useReducer(undoReducer, {
     past: [],
     present: initialPresent,
@@ -78,11 +80,14 @@ export const useUndo = <T>(initialPresent: T, action: Action<T>) => {
   const canRedo = state.future.length !== 0;
 
   const undo = useCallback(() => dispatch({ type: UNDO }), []);
+
   const redo = useCallback(() => dispatch({ type: REDO }), []);
+
   const set = useCallback(
     (newPresent: T) => dispatch({ type: SET, newPresent }),
     []
   );
+
   const reset = useCallback(
     (newPresent: T) => dispatch({ type: RESET, newPresent }),
     []
