@@ -25,10 +25,10 @@ export const ProjectListScreen = () => {
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
+        <ButtonNoPadding type={"link"} onClick={open}>
+          创建项目
+        </ButtonNoPadding>
       </Row>
-      <ButtonNoPadding type={"link"} onClick={open}>
-        创建项目
-      </ButtonNoPadding>
       <SearchPanel param={param} setParam={setParam} users={users || []} />
       {error ? (
         <Typography.Text type={"danger"}>{error.message}</Typography.Text>
